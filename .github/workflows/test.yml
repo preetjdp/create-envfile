@@ -1,0 +1,30 @@
+name: TEST THIS
+
+on:
+  push:
+    
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: preetjdp/create-envfile@v1
+      - name: LS
+        run: |
+          ls
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: "12.19.0"
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install Dependencies
+        run: npm install
+      - name: Build Devfolio API
+        run: npm build
+      - name: Test Devfolio API
+        run: npm test
